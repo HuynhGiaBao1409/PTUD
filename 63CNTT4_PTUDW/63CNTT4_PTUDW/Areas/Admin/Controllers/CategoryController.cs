@@ -46,6 +46,8 @@ namespace _63CNTT4_PTUDW.Areas.Admin.Controllers
         // GET: Admin/Category/Create
         public ActionResult Create()
         {
+            ViewBag.ListCat = new SelectList(categoriesDAO.getList("Index"), "Id", "Name");
+            ViewBag.OrderList = new SelectList(categoriesDAO.getList("Index"), "Order", "Name");
             return View();
         }
 
@@ -58,7 +60,10 @@ namespace _63CNTT4_PTUDW.Areas.Admin.Controllers
                 categoriesDAO.Insert(categories);
                 return RedirectToAction("Index");
             }
+            ViewBag.ListCat = new SelectList(categoriesDAO.getList("Index"), "Id", "Name");
+            ViewBag.OrderList = new SelectList(categoriesDAO.getList("Index"), "Order", "Name");
             return View(categories);
+
         }
 
         //////////////////////////////////////////////////////////////////////////////////////
