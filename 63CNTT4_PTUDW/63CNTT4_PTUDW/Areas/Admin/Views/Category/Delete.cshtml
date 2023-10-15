@@ -1,4 +1,4 @@
-﻿@model MyClass.Model.Categories
+﻿﻿@model MyClass.Model.Categories
 
 @{
     ViewBag.Title = "Delete";
@@ -29,11 +29,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ParentID)
+            @Html.DisplayNameFor(model => model.ParentId)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ParentID)
+            @Html.DisplayFor(model => model.ParentId)
         </dd>
 
         <dt>
@@ -61,14 +61,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CreateAt)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreateAt)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.CreateBy)
         </dt>
 
@@ -77,11 +69,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UpdateAt)
+            @Html.DisplayNameFor(model => model.CreateAt)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UpdateAt)
+            @Html.DisplayFor(model => model.CreateAt)
         </dd>
 
         <dt>
@@ -90,6 +82,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.UpdateBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpdateAt)
         </dd>
 
         <dt>
@@ -102,7 +102,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
