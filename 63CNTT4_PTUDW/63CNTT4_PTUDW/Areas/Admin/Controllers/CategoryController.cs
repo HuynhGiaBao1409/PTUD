@@ -28,12 +28,15 @@ namespace _63CNTT4_PTUDW.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Hien thi thong bao thanh cong
+                TempData["message"] = new XMessage("danger", "Không tìm thấy nhà cung cấp");
             }
             Categories categories = categoriesDAO.getRow(id);
             if (categories == null)
             {
-                return HttpNotFound();
+                //Hien thi thong bao thanh cong
+                TempData["message"] = new XMessage("danger", "Không tìm thấy nhà cung cấp");
+                return RedirectToAction("Index");
             }
             return View(categories);
         }
@@ -155,12 +158,16 @@ namespace _63CNTT4_PTUDW.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //hien thi thong bao
+                TempData["message"] = new XMessage("danger", "Xóa mẫu tin thất bại");
+                return RedirectToAction("Trash");
             }
             Categories categories = categoriesDAO.getRow(id);
             if (categories == null)
             {
-                return HttpNotFound();
+                //hien thi thong bao
+                TempData["message"] = new XMessage("danger", "Xóa mẫu tin thất bại");
+                return RedirectToAction("Index");
             }
             return View(categories);
         }
@@ -171,8 +178,11 @@ namespace _63CNTT4_PTUDW.Areas.Admin.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Categories categories = categoriesDAO.getRow(id);
+            //tim thay mau tin, xoa
             categoriesDAO.Delete(categories);
-            return RedirectToAction("Index");
+            //hien thi thong bao
+            TempData["message"] = new XMessage("success", "Xóa mẫu tin thành công");          
+            return RedirectToAction("Trash");
         }
         ////////////////////////////////////////////////////////////////////
         // GET: Admin/Category/Status/5
@@ -239,6 +249,36 @@ namespace _63CNTT4_PTUDW.Areas.Admin.Controllers
         public ActionResult Trash()
         {
             return View(categoriesDAO.getList("Trash"));
+        }
+        ////////////////////////////////////////////////////////////////////
+        // GET: Admin/Category/Status/5
+        public ActionResult Undo(int? id)
+        {
+            if (id == null)
+            {
+                //hien thi thong bao
+                TempData["message"] = new XMessage("danger", "Phục hồi mẫu tin thất bại");
+                return RedirectToAction("Index");
+            }
+            Categories categories = categoriesDAO.getRow(id);
+            if (categories == null)
+            {
+                //hien thi thong bao
+                TempData["message"] = new XMessage("danger", "Phục hồi mẫu tin thất bại");
+                return RedirectToAction("Index");
+            }
+            //cap nhat trang thai status
+            categories.Status = 2;
+            //cap nhat Update At
+            categories.UpdateAt = DateTime.Now;
+            //cap nhat Update By
+            categories.UpdateBy = Convert.ToInt32(Session["UserID"]);
+            //Update DB
+            categoriesDAO.Update(categories);
+            //hien thi thong bao
+            TempData["message"] = new XMessage("success", "Phục hồi mẫu tin thành công");
+            //tro ve trang Index
+            return RedirectToAction("Trash");// o lai phuc hoi de tiep tuc Undo
         }
     }
 }
