@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThuchanhPTUDW", "ThuchanhPTUDW.csproj", "{884E3B0E-0F4A-43F0-A4DD-E6E5850D4BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyClass", "..\MyClass\MyClass.csproj", "{1E56E4FF-E594-4483-8D5C-9C8FB5B5916D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{884E3B0E-0F4A-43F0-A4DD-E6E5850D4BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{884E3B0E-0F4A-43F0-A4DD-E6E5850D4BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{884E3B0E-0F4A-43F0-A4DD-E6E5850D4BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{884E3B0E-0F4A-43F0-A4DD-E6E5850D4BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E56E4FF-E594-4483-8D5C-9C8FB5B5916D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E56E4FF-E594-4483-8D5C-9C8FB5B5916D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E56E4FF-E594-4483-8D5C-9C8FB5B5916D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E56E4FF-E594-4483-8D5C-9C8FB5B5916D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FA82C001-57BD-467A-90D8-D0DFC106B577}
+	EndGlobalSection
+EndGlobal

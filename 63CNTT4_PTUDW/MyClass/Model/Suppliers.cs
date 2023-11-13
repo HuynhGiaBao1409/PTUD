@@ -13,21 +13,31 @@ namespace MyClass.Model
     {
         [Key]
         public int Id { get; set; }
+
         [Required(ErrorMessage = "Tên nhà cung cấp không được để trống")]
         [Display(Name = "Tên nhà cung cấp")]
         public string Name { get; set; }
+
         [Display(Name = "Hình ảnh")]
         public string Image { get; set; }
+
         [Display(Name = "Link rút gọn")]
         public string Slug { get; set; }
+
         [Display(Name = "Sắp xếp")]
         public int? Order { get; set; }
+
         [Display(Name = "Tên đầy đủ")]
         public string Fullname { get; set; }
+
         [Display(Name = "Số điện thoại")]
         public string Phone { get; set; }
+
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [Display(Name = "Liên kết")]
+        public string UrlSite { get; set; }
+
         [Required(ErrorMessage = "Mô tả không được để trống")]
         [Display(Name = "Mô tả")]
         public string MetaDesc { get; set; }
@@ -47,6 +57,6 @@ namespace MyClass.Model
         [Display(Name = "Ngày cập nhật")]
         public DateTime UpdateAt { get; set; }
         [Display(Name = "Trạng thái")]
-        public int? Status { get; set; }
+        public int? Status { get; set; }//Model # SQL 
     }
 }
