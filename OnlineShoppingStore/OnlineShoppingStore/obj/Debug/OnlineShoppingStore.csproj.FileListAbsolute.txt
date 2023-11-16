@@ -77,3 +77,7 @@ D:\App_web\PTUD\OnlineShoppingStore\OnlineShoppingStore\obj\Debug\OnlineShopping
 D:\App_web\PTUD\OnlineShoppingStore\OnlineShoppingStore\obj\Debug\OnlineShoppingStore.csproj.CopyComplete
 D:\App_web\PTUD\OnlineShoppingStore\OnlineShoppingStore\obj\Debug\OnlineShoppingStore.dll
 D:\App_web\PTUD\OnlineShoppingStore\OnlineShoppingStore\obj\Debug\OnlineShoppingStore.pdb
+D:\App_web\PTUD\OnlineShoppingStore\OnlineShoppingStore\bin\EntityFramework.dll
+D:\App_web\PTUD\OnlineShoppingStore\OnlineShoppingStore\bin\EntityFramework.SqlServer.dll
+D:\App_web\PTUD\OnlineShoppingStore\OnlineShoppingStore\bin\EntityFramework.xml
+D:\App_web\PTUD\OnlineShoppingStore\OnlineShoppingStore\bin\EntityFramework.SqlServer.xml
