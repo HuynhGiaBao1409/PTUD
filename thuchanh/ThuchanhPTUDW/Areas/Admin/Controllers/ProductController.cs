@@ -17,7 +17,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
     {
         ProductDAO productDAO = new ProductDAO();
         CategoriesDAO categoriesDAO = new CategoriesDAO();
-        SuppliersDAO suppliersDAO = new SuppliersDAO(); 
+        SuppliersDAO suppliersDAO = new SuppliersDAO();
 
         // GET: Admin/Product
         public ActionResult Index()
@@ -50,7 +50,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             return View();
         }
 
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Products products)
@@ -114,7 +114,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             return View(products);
         }
 
-       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Products products)
@@ -122,7 +122,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 //xu ly tu dong 1 so truong 
-               
+
                 //-----Slug
                 products.Slug = XString.Str_Slug(products.Name);
                 //-----UpdateAt
@@ -165,6 +165,8 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 TempData["message"] = new XMessage("success", "Cập nhật sản phẩm thành công");
                 return RedirectToAction("Index");
             }
+            ViewBag.ListCatID = new SelectList(categoriesDAO.getList("Index"), "Id", "Name");//categories
+            ViewBag.ListSupID = new SelectList(suppliersDAO.getList("Index"), "Id", "Name");//supliers
             return View(products);
         }
 
@@ -175,7 +177,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             {
                 // thong bao cap nhat thanh cong
                 TempData["message"] = new XMessage("danger", "Không tìm thấy sản phẩm");
-                
+
             }
             Products products = productDAO.getRow(id);
             if (products == null)
@@ -206,7 +208,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             TempData["message"] = new XMessage("success", "Xóa sản phẩm thành công");
             //O lai trang thung rac
             return RedirectToAction("Trash");
-            
+
         }
         public ActionResult Status(int? id)
         {
@@ -275,7 +277,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         // GET: Admin/Category/Trash : Thùng rác
         public ActionResult Trash()
         {
-            return View(suppliersDAO.getList("Trash"));
+            return View(productDAO.getList("Trash"));
         }
 
         //////////////////////////////////////////////////////////////////////

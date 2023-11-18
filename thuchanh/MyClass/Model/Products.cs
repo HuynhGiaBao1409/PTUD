@@ -15,16 +15,15 @@ namespace MyClass.Model
         public int Id { get; set; }
 
         [Display(Name = "Loại sản phẩm")]
-        [Required(ErrorMessage = " Mã loại sản phẩm không được để trống")]
+        [Required(ErrorMessage = "Mã loại sản phẩm không được để trống")]
         public int CatId { get; set; }
-
 
         [Display(Name = "Tên sản phẩm")]
         [Required(ErrorMessage = "Tên sản phẩm không được để trống")]
         public string Name { get; set; }
 
         [Display(Name = "Mã NCC")]
-        [Required(ErrorMessage = "Tên nhà cung cấp không được để trống")]
+        [Required(ErrorMessage = "Nhà CC không được để trống")]
         public int SupplierID { get; set; }
 
         [Display(Name = "Tên rút gọn")]
@@ -34,8 +33,9 @@ namespace MyClass.Model
         public string Image { get; set; }
 
         [Display(Name = "Giá sản phẩm")]
-        [Required(ErrorMessage = "Giá sản phẩm không được để trống")]
+        [Required(ErrorMessage = "Giá không được để trống")]
         public decimal Price { get; set; }
+
         [Display(Name = "Giá bán")]
         [Required(ErrorMessage = "Giá bán không được để trống")]
         public decimal SalePrice { get; set; }
@@ -52,24 +52,24 @@ namespace MyClass.Model
         [Required(ErrorMessage = "Từ khóa không được để trống")]
         public string MetaKey { get; set; }
 
+        [Display(Name = "Người tạo")]
+        [Required(ErrorMessage = "Người tạo không được để trống")]
+        public int CreateBy { get; set; }
+
         [Display(Name = "Ngày tạo")]
         [Required(ErrorMessage = "Ngày tạo không được để trống")]
         public DateTime CreateAt { get; set; }
-        [Display(Name = "Người tạo")]
-        [Required(ErrorMessage = "Người tạo không được để trống")]
-        public int? CreateBy { get; set; }
+
         [Display(Name = "Người cập nhật")]
         [Required(ErrorMessage = "Người cập nhật không được để trống")]
         public int UpdateBy { get; set; }
+
         [Display(Name = "Ngày cập nhật")]
         [Required(ErrorMessage = "Ngày cập nhật không được để trống")]
         public DateTime UpdateAt { get; set; }
 
         [Display(Name = "Trạng thái")]
         public int? Status { get; set; }
-
-
-
 
     }
 }
