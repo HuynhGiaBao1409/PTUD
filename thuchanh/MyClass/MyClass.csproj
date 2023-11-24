@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAO\CategoriesDAO.cs" />
+    <Compile Include="DAO\MenusDB.cs" />
     <Compile Include="DAO\ProductDAO.cs" />
     <Compile Include="DAO\SuppliersDAO.cs" />
     <Compile Include="Model\Categories.cs" />
