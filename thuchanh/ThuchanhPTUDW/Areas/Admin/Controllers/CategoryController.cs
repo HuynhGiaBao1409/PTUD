@@ -89,6 +89,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             return View(categories);
         }
 
+
         //////////////////////////////////////////////////////////////////////
         // GET: Admin/Category/Edit/5
         public ActionResult Edit(int? id)
@@ -141,9 +142,9 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 categories.UpdateAt = DateTime.Now;
                 //-----UpdateBy
                 categories.UpdateBy = Convert.ToInt32(Session["UserID"]);
-                categoriesDAO.Insert(categories);
+                categoriesDAO.Update(categories);
                 //hien thi thong bao thanh cong
-                TempData["message"] = new XMessage("success", "Tạo mới sản phẩm thành công");
+                TempData["message"] = new XMessage("success", "Cập nhật thông tin thành công");
                 return RedirectToAction("Index");
             }
             ViewBag.CatList = new SelectList(categoriesDAO.getList("Index"), "Id", "Name");

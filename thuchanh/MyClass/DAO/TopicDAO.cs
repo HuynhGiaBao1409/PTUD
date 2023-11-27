@@ -8,7 +8,7 @@ using MyClass.Model;
 
 namespace MyClass.DAO
 {
-    public class TopicDAO
+    public class TopicsDAO
     {
         private MyDBContext db = new MyDBContext();
         /////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +77,5 @@ namespace MyClass.DAO
             db.Topics.Remove(row);
             return db.SaveChanges();
         }
-
     }
 }

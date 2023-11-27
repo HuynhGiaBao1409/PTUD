@@ -375,6 +375,14 @@
     <Content Include="Public\img\r7.jpg" />
     <Content Include="Public\img\r8.jpg" />
     <Content Include="Public\img\r9.jpg" />
+    <Content Include="Public\img\supplier\1027593-download-free-fantasy-pics-wallpaper-2560x1600.jpg" />
+    <Content Include="Public\img\supplier\1183450.jpg" />
+    <Content Include="Public\img\supplier\12345.jpg" />
+    <Content Include="Public\img\supplier\1234635.png" />
+    <Content Include="Public\img\supplier\Anh 4k.jpg" />
+    <Content Include="Public\img\supplier\SzqUiR.jpg" />
+    <Content Include="Public\img\supplier\z4798932994786_f9ad3bf7b1f18d65f9fa851401309f31.jpg" />
+    <Content Include="Public\img\supplier\z4798933089404_4506f9d52dddfb77c823af48c4f52c43.jpg" />
     <Content Include="Public\js\jquery.dataTables.min.js" />
     <Content Include="Public\js\main.js" />
     <Content Include="Public\plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
@@ -2774,6 +2782,7 @@
     <Content Include="Areas\Admin\Views\Topic\Details.cshtml" />
     <Content Include="Areas\Admin\Views\Topic\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Topic\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Topic\Trash.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -2825,7 +2834,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Public\img\supplier\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

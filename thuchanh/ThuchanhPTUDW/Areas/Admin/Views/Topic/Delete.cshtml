@@ -1,113 +1,74 @@
-﻿@model MyClass.Model.Topics
+﻿﻿@model MyClass.Model.Topics
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Xác nhận xóa chủ đề bài viết";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Delete</h2>
+@section header {
+    <link href="~/Public/css/cdn.datatables.net_1.13.6_css_jquery.dataTables.min.css" rel="stylesheet" />
+}
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Topics</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
+@section footer {
+    <script src="~/Public/js/cdn.datatables.net_1.13.6_js_jquery.dataTables.min.js"></script>
+    <script>let table = new DataTable('#myTable');</script>
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Slug)
-        </dt>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
 
-        <dd>
-            @Html.DisplayFor(model => model.Slug)
-        </dd>
+        <!-- Main content -->
+        <section class="content my-2">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ParentId)
-        </dt>
+            <!-- Default box -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong class="text-danger">BẠN CÓ CHẮC CHẮN XÓA MỤC NÀY?</strong>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <a href="@Url.Action("Index","Topic")" class="btn-sm btn-info"> <i class="fa fa-long-arrow-alt-left"></i> Quay lại</a>
+                        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.ParentId)
-        </dd>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @*Hien thi noi dung thong bao ngay ben tren bang du lieu*@
+                    @Html.Partial("Message")
+                    <table class="table table-bordered table-striped" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                                <th>@Html.DisplayNameFor(model => model.Slug)</th>
+                                <th>@Html.DisplayNameFor(model => model.ParentId)</th>
+                                <th>@Html.DisplayNameFor(model => model.Order)</th>
+                                <th>@Html.DisplayNameFor(model => model.Id)</th>
+                                <th>Chức năng</th>
+                            </tr>
+                        </thead>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Order)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Order)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.MetaDesc)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.MetaDesc)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.MetaKey)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.MetaKey)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreateBy)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreateBy)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CreateAt)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CreateAt)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdateBy)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UpdateBy)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.UpdateAt)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UpdateAt)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
-</div>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox" name="checkid" value="" /></td>
+                                <td>@Html.DisplayFor(model => model.Name)</td>
+                                <td>@Html.DisplayFor(model => model.Slug)</td>
+                                <td>@Html.DisplayFor(model => model.ParentId)</td>
+                                <td>@Html.DisplayFor(model => model.Order)</td>
+                                <td>@Html.DisplayFor(model => model.Id)</td>
+                                <td>
+                                    <button class="btn-sm btn-danger" type="submit" name="Delete"> Xóa [Delete] <i class="fa fa-trash"></i> </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div><!-- /.card-body -->
+            </div><!-- /.card -->
+        </section><!-- /.content -->
+    </div><!-- /.content-wrapper -->
+}
