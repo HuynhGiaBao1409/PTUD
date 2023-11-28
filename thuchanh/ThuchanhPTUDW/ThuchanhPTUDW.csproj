@@ -175,6 +175,7 @@
     <Compile Include="Areas\Admin\Controllers\PageController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SliderController.cs" />
     <Compile Include="Areas\Admin\Controllers\SupplierController.cs" />
     <Compile Include="Areas\Admin\Controllers\TopicController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -389,6 +390,20 @@
     <Content Include="Public\img\r7.jpg" />
     <Content Include="Public\img\r8.jpg" />
     <Content Include="Public\img\r9.jpg" />
+    <Content Include="Public\img\slider\Image-01.jpg" />
+    <Content Include="Public\img\slider\Image-02.jpg" />
+    <Content Include="Public\img\slider\Image-03.jpg" />
+    <Content Include="Public\img\slider\Image-04.jpg" />
+    <Content Include="Public\img\slider\Image-05.jpg" />
+    <Content Include="Public\img\slider\Image-06.jpg" />
+    <Content Include="Public\img\slider\Image-07.jpg" />
+    <Content Include="Public\img\slider\Image-08.jpg" />
+    <Content Include="Public\img\slider\ins-1.jpg" />
+    <Content Include="Public\img\slider\ins-2.jpg" />
+    <Content Include="Public\img\slider\ins-3.jpg" />
+    <Content Include="Public\img\slider\ins-4.jpg" />
+    <Content Include="Public\img\slider\ins-5.jpg" />
+    <Content Include="Public\img\slider\ins-6.jpg" />
     <Content Include="Public\img\supplier\1027593-download-free-fantasy-pics-wallpaper-2560x1600.jpg" />
     <Content Include="Public\img\supplier\1183450.jpg" />
     <Content Include="Public\img\supplier\12345.jpg" />
@@ -2809,6 +2824,12 @@
     <Content Include="Areas\Admin\Views\Page\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Page\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Page\Trash.cshtml" />
+    <Content Include="Areas\Admin\Views\Slider\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Slider\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\Slider\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Slider\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Slider\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Slider\Trash.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
