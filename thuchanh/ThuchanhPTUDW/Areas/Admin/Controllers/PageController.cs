@@ -7,25 +7,24 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MyClass.Model;
-using MyClass.DAO;
 using ThuchanhPTUDW.Library;
 using System.IO;
+using MyClass.DAO;
 
 namespace ThuchanhPTUDW.Areas.Admin.Controllers
 {
-    public class PostController : Controller
+    public class PageController : Controller
     {
         private MyDBContext db = new MyDBContext();
         PostDAO postsDAO = new PostDAO();
-        TopicsDAO topicsDAO = new TopicsDAO();
 
-        // GET: Admin/Post
+        // GET: Admin/Page
         public ActionResult Index()
         {
-            return View(postsDAO.getList("Index", "Post"));
+            return View(postsDAO.getList("Index", "Page"));
         }
 
-        // GET: Admin/Post/Details/5
+        // GET: Admin/Page/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -40,10 +39,9 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             return View(posts);
         }
 
-        // GET: Admin/Post/Create
+        // GET: Admin/Page/Create
         public ActionResult Create()
         {
-            ViewBag.TopList = new SelectList(topicsDAO.getList("Index"), "Id", "Name");
             return View();
         }
 
@@ -73,7 +71,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                         string imgName = slug + id + img.FileName.Substring(img.FileName.LastIndexOf("."));
                         posts.Image = imgName;
 
-                        string PathDir = "~/Public/img/post/";
+                        string PathDir = "~/Public/img/page/";
                         string PathFile = Path.Combine(Server.MapPath(PathDir), imgName);
                         //upload hinh
                         img.SaveAs(PathFile);
@@ -89,8 +87,8 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 {
                     posts.Order = posts.Order + 1;
                 }
-                //xu ly cho muc PostType
-                posts.PostType = "post";
+                //xu ly cho muc PostType = page (doi voi Page)
+                posts.PostType = "page";
 
                 //Xu ly cho muc CreateAt
                 posts.CreateAt = DateTime.Now;
@@ -101,15 +99,15 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 postsDAO.Insert(posts);
 
                 //Thong bao thanh cong
-                TempData["message"] = new XMessage("success", "Thêm bài viết thành công");
+                TempData["message"] = new XMessage("success", "Thêm trang đơn thành công");
                 return RedirectToAction("Index");
             }
-            ViewBag.TopList = new SelectList(topicsDAO.getList("Index"), "Id", "Name");
+            //doi voi page thi khong co chu de:
+            //ViewBag.TopList = new SelectList(topicsDAO.getList("Index"), "Id", "Name");
             return View(posts);
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        // GET: Admin/Post/Staus/5:Thay doi trang thai cua mau tin
+        // GET: Admin/Page/Staus/5
         public ActionResult Status(int? id)
         {
             if (id == null)
@@ -117,7 +115,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 //Thong bao that bai
                 TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
                 //chuyen huong trang
-                return RedirectToAction("Index", "Post");
+                return RedirectToAction("Index", "Page");
             }
 
             //khi nhap nut thay doi Status cho mot mau tin
@@ -129,7 +127,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
 
                 //chuyen huong trang
-                return RedirectToAction("Index", "Post");
+                return RedirectToAction("Index", "Page");
             }
             //thay doi trang thai Status tu 1 thanh 2 va nguoc lai
             posts.Status = (posts.Status == 1) ? 2 : 1;
@@ -145,30 +143,25 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             TempData["message"] = new XMessage("success", "Cập nhật trạng thái thành công");
 
             //khi cap nhat xong thi chuyen ve Index
-            return RedirectToAction("Index", "Post");
+            return RedirectToAction("Index", "Page");
         }
 
-        // GET: Admin/Post/Edit/5
+        // GET: Admin/Page/Edit/5
         public ActionResult Edit(int? id)
         {
-            ViewBag.TopList = new SelectList(topicsDAO.getList("Index"), "Id", "Name");
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            Posts posts = postsDAO.getRow(id);
-
+            Posts posts = db.Posts.Find(id);
             if (posts == null)
             {
                 return HttpNotFound();
             }
-
             return View(posts);
         }
 
-        // POST: Admin/Post/Edit/5: Cap nhat mau tin
+        // POST: Admin/Page/Edit/5: Cap nhat mau tin
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Posts posts)
@@ -194,78 +187,73 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                         string imgName = slug + id + img.FileName.Substring(img.FileName.LastIndexOf("."));
                         posts.Image = imgName;
 
-                        string PathDir = "~/Public/img/post/";
+                        string PathDir = "~/Public/img/page/";
                         string PathFile = Path.Combine(Server.MapPath(PathDir), imgName);
                         //upload hinh
                         img.SaveAs(PathFile);
                     }
                 }//ket thuc phan upload hinh anh
 
-                //xu ly cho muc PostType
-                //posts.PostType = "post";
+                ////xu ly cho muc PostType = page (doi voi Page)
+                //posts.PostType = "page";
 
                 //Xu ly cho muc UpdateAt
                 posts.UpdateAt = DateTime.Now;
 
                 //Xu ly cho muc UpdateBy
                 posts.UpdateBy = Convert.ToInt32(Session["UserId"]);
-                //-----Order
-                if (posts.Order == null)
-                {
-                    posts.Order = 1;
-                }
-                else
-                {
-                    posts.Order = posts.Order + 1;
-                }
+                //DB
                 postsDAO.Update(posts);
+
                 //Thong bao thanh cong
-                TempData["message"] = new XMessage("success", "Sửa bài viết thành công");
+                TempData["message"] = new XMessage("success", "Sửa trang đơn thành công");
                 return RedirectToAction("Index");
             }
-            ViewBag.TopList = new SelectList(topicsDAO.getList("Index"), "Id", "Name");
+            //doi voi page thi khong co chu de:
+            //ViewBag.TopList = new SelectList(topicsDAO.getList("Index"), "Id", "Name");
             return View(posts);
         }
 
-
-        // GET: Admin/Post/Delete/5
+        // GET: Admin/Page/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Posts posts = postsDAO.getRow(id);
+            Posts posts = db.Posts.Find(id);
             if (posts == null)
             {
                 return HttpNotFound();
             }
             return View(posts);
         }
-
-        // POST: Admin/Category/Delete/5:Xoa mot mau tin ra khoi CSDL
+        // POST: Admin/Page/Delete/5:Xoa mot mau tin ra khoi CSDL
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Posts posts = postsDAO.getRow(id);
+
+            //tim thay mau tin thi xoa, cap nhat cho Links
             if (postsDAO.Delete(posts) == 1)
             {
                 //duong dan den anh can xoa
-                string PathDir = "~/Public/img/post/";
-            //cap nhat thi phai xoa file cu
-            if (posts.Image != null)
-            {
-                string DelPath = Path.Combine(Server.MapPath(PathDir), posts.Image);
-                System.IO.File.Delete(DelPath);
+                string PathDir = "~/Public/img/page/";
+                //cap nhat thi phai xoa file cu
+                if (posts.Image != null)
+                {
+                    string DelPath = Path.Combine(Server.MapPath(PathDir), posts.Image);
+                    System.IO.File.Delete(DelPath);
+                }
             }
-        }
-        //Thong bao thanh cong
-        TempData["message"] = new XMessage("success", "Xóa danh mục thành công");
+
+            //Thong bao thanh cong
+            TempData["message"] = new XMessage("success", "Xóa danh mục thành công");
             //O lai trang thung rac
             return RedirectToAction("Trash");
         }
-        // GET: Admin/Category/DelTrash/5
+        // GET: Admin/Page/DelTrash/5
         public ActionResult DelTrash(int? id)
         {
             //khi nhap nut thay doi Status cho mot mau tin
@@ -278,21 +266,24 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             posts.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
             posts.UpdateAt = DateTime.Now;
 
-            //Goi ham Update trong CategoryDAO
+            //Goi ham Update trong PostDAO
             postsDAO.Update(posts);
 
             //Thong bao thanh cong
-            TempData["message"] = new XMessage("success", "Xóa bài viết thành công");
+            TempData["message"] = new XMessage("success", "Xóa trang đơn thành công");
 
             //khi cap nhat xong thi chuyen ve Index
-            return RedirectToAction("Index", "Post");
+            return RedirectToAction("Index", "Page");
         }
+
+
         // GET: Admin/Posts/Trash/5
         public ActionResult Trash(int? id)
         {
-            return View(postsDAO.getList("Trash"));
+            return View(postsDAO.getList("Trash", "page"));
         }
-        // GET: Admin/Post/Recover/5
+
+        // GET: Admin/Page/Recover/5
         public ActionResult Recover(int? id)
         {
             if (id == null)
@@ -300,7 +291,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 //Thong bao that bai
                 TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
                 //chuyen huong trang
-                return RedirectToAction("Index", "Post");
+                return RedirectToAction("Index", "Page");
             }
 
             //khi nhap nut thay doi Status cho mot mau tin
@@ -312,7 +303,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 TempData["message"] = new XMessage("danger", "Phục hồi dữ liệu thất bại");
 
                 //chuyen huong trang
-                return RedirectToAction("Index", "Post");
+                return RedirectToAction("Index", "Page");
             }
             //thay doi trang thai Status tu 1 thanh 2 va nguoc lai
             posts.Status = 2;
@@ -328,7 +319,8 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             TempData["message"] = new XMessage("success", "Phục hồi dữ liệu thành công");
 
             //khi cap nhat xong thi chuyen ve Trash
-            return RedirectToAction("Trash", "Post");
+            return RedirectToAction("Trash", "Page");
         }
+
     }
 }

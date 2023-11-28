@@ -172,6 +172,7 @@
     <Compile Include="Areas\Admin\Controllers\CategoryController.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\MenuController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PageController.cs" />
     <Compile Include="Areas\Admin\Controllers\PostController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductController.cs" />
     <Compile Include="Areas\Admin\Controllers\SupplierController.cs" />
@@ -343,6 +344,14 @@
     <Content Include="Public\img\instagram\ins-6.jpg" />
     <Content Include="Public\img\login.jpg" />
     <Content Include="Public\img\logo.png" />
+    <Content Include="Public\img\page\Screenshot 2023-09-14 101039.png" />
+    <Content Include="Public\img\page\Screenshot 2023-10-06 163937.png" />
+    <Content Include="Public\img\page\Screenshot 2023-11-07 081904.png" />
+    <Content Include="Public\img\page\Screenshot 2023-11-07 213655.png" />
+    <Content Include="Public\img\page\Screenshot 2023-11-11 174642.png" />
+    <Content Include="Public\img\page\Screenshot 2023-11-11 174819.png" />
+    <Content Include="Public\img\page\Screenshot 2023-11-14 163151.png" />
+    <Content Include="Public\img\page\Screenshot 2023-11-15 112914.png" />
     <Content Include="Public\img\post\Screenshot 2023-11-11 145803.png" />
     <Content Include="Public\img\post\Screenshot 2023-11-11 174819.png" />
     <Content Include="Public\img\post\Screenshot 2023-11-11 180049.png" />
@@ -2794,6 +2803,12 @@
     <Content Include="Areas\Admin\Views\Post\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Post\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Post\Trash.cshtml" />
+    <Content Include="Areas\Admin\Views\Page\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Page\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\Page\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Page\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Page\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Page\Trash.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
