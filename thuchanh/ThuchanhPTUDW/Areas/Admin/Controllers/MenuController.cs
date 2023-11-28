@@ -18,6 +18,8 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         SuppliersDAO suppliersDAO = new SuppliersDAO();
         ProductDAO productsDAO = new ProductDAO();
         MenusDAO menusDAO = new MenusDAO();
+        TopicsDAO topicsDAO = new TopicsDAO();
+        PostDAO postsDAO = new PostDAO();
         /// /////////////////////////////////////////////////////////////
         // GET: Admin/Menu/Index
         public ActionResult Index()
@@ -25,6 +27,8 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             ViewBag.CatList = categoriesDAO.getList("Index");
             ViewBag.SupList = suppliersDAO.getList("Index");
             ViewBag.ProList = productsDAO.getList("Index");
+            ViewBag.TopList = topicsDAO.getList("Index");
+            List<Menus> menu = menusDAO.getList("Index");
             return View(menusDAO.getList("Index"));
         }
 

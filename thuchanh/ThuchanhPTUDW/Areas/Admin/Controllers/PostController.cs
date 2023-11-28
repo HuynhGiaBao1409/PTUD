@@ -18,6 +18,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         private MyDBContext db = new MyDBContext();
         PostDAO postsDAO = new PostDAO();
         TopicsDAO topicsDAO = new TopicsDAO();
+        LinkDAO linksDAO = new LinkDAO();
 
         // GET: Admin/Post
         public ActionResult Index()
@@ -97,9 +98,15 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
 
                 //Xu ly cho muc CreateBy
                 posts.CreateBy = Convert.ToInt32(Session["UserId"]);
-                //-- DB
-                postsDAO.Insert(posts);
-
+                //xu ly cho muc Topics
+                if (postsDAO.Insert(posts) == 1)//khi them du lieu thanh cong
+                {
+                    Links links = new Links();
+                    links.Slug = posts.Slug;
+                    links.TableId = posts.Id;
+                    links.Type = "post";
+                    linksDAO.Insert(links);
+                }
                 //Thong bao thanh cong
                 TempData["message"] = new XMessage("success", "Thêm bài viết thành công");
                 return RedirectToAction("Index");
@@ -218,7 +225,15 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 {
                     posts.Order = posts.Order + 1;
                 }
-                postsDAO.Update(posts);
+                //xu ly cho muc Links
+                if (postsDAO.Update(posts) == 1)//khi sua du lieu thanh cong
+                {
+                    Links links = new Links();
+                    links.Slug = posts.Slug;
+                    links.TableId = posts.Id;
+                    links.Type = "post";
+                    linksDAO.Insert(links);
+                }
                 //Thong bao thanh cong
                 TempData["message"] = new XMessage("success", "Sửa bài viết thành công");
                 return RedirectToAction("Index");

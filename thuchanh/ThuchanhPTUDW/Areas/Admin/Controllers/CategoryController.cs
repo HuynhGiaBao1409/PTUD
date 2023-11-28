@@ -14,6 +14,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
 {
     public class CategoryController : Controller
     {
+        LinkDAO linksDAO = new LinkDAO();
         CategoriesDAO categoriesDAO = new CategoriesDAO();
         //////////////////////////////////////////////////////////////////////
         // GET: Admin/Category/Index
@@ -79,7 +80,15 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 categories.UpdateAt = DateTime.Now;
                 //-----UpdateBy
                 categories.UpdateBy = Convert.ToInt32(Session["UserID"]);
-                categoriesDAO.Insert(categories);
+                //xu ly cho muc Topics
+                if (categoriesDAO.Insert(categories) == 1)//khi them du lieu thanh cong
+                {
+                    Links links = new Links();
+                    links.Slug = categories.Slug;
+                    links.TableId = categories.Id;
+                    links.Type = "category";
+                    linksDAO.Insert(links);
+                }
                 //hien thi thong bao thanh cong
                 TempData["message"] = new XMessage("success","Tạo mới sản phẩm thành công");
                 return RedirectToAction("Index");
@@ -142,7 +151,15 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 categories.UpdateAt = DateTime.Now;
                 //-----UpdateBy
                 categories.UpdateBy = Convert.ToInt32(Session["UserID"]);
-                categoriesDAO.Update(categories);
+                //Cap nhat du lieu, sua them cho phan Links phuc vu cho Topics
+                if (categoriesDAO.Update(categories) == 1)
+                {
+                    //Neu trung khop thong tin: Type = category va TableID = categories.ID
+                    Links links = linksDAO.getRow(categories.Id, "category");
+                    //cap nhat lai thong tin
+                    links.Slug = categories.Slug;
+                    linksDAO.Update(links);
+                }
                 //hien thi thong bao thanh cong
                 TempData["message"] = new XMessage("success", "Cập nhật thông tin thành công");
                 return RedirectToAction("Index");
@@ -180,8 +197,14 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Categories categories = categoriesDAO.getRow(id);
-            //tim thay mau tin, xoa
-            categoriesDAO.Delete(categories);
+
+            //tim thay mau tin thi xoa, cap nhat cho Links
+            if (categoriesDAO.Delete(categories) == 1)
+            {
+                Links links = linksDAO.getRow(categories.Id, "category");
+                //Xoa luon cho Links
+                linksDAO.Delete(links);
+            }
             //hien thi thong bao
             TempData["message"] = new XMessage("success", "Xóa mẫu tin thành công");
            
