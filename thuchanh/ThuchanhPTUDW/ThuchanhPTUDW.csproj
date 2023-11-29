@@ -353,10 +353,12 @@
     <Content Include="Public\img\page\1183450.jpg" />
     <Content Include="Public\img\page\12345.jpg" />
     <Content Include="Public\img\page\1234635.png" />
+    <Content Include="Public\img\page\a0.png" />
     <Content Include="Public\img\page\Anh 4k.jpg" />
     <Content Include="Public\img\page\b0.jpg" />
     <Content Include="Public\img\page\ba3.png" />
     <Content Include="Public\img\page\q0.png" />
+    <Content Include="Public\img\page\sad0.png" />
     <Content Include="Public\img\page\Screenshot 2023-09-28 164831.png" />
     <Content Include="Public\img\page\Screenshot 2023-09-28 165030.png" />
     <Content Include="Public\img\page\Screenshot 2023-10-06 161356.png" />
@@ -376,6 +378,8 @@
     <Content Include="Public\img\post\a0.png" />
     <Content Include="Public\img\post\Anh 4k.jpg" />
     <Content Include="Public\img\post\b0.png" />
+    <Content Include="Public\img\post\goi-nhung-con-rong0.png" />
+    <Content Include="Public\img\post\sad0.png" />
     <Content Include="Public\img\post\Screenshot 2023-09-28 164831.png" />
     <Content Include="Public\img\post\Screenshot 2023-09-28 165030.png" />
     <Content Include="Public\img\post\Screenshot 2023-10-06 161356.png" />
@@ -405,8 +409,11 @@
     <Content Include="Public\img\product7.png" />
     <Content Include="Public\img\product8.png" />
     <Content Include="Public\img\product\ao-so-mi.png" />
+    <Content Include="Public\img\product\ao-thun.jpg" />
     <Content Include="Public\img\product\ao-thun.png" />
+    <Content Include="Public\img\product\balo.png" />
     <Content Include="Public\img\product\card.jpg" />
+    <Content Include="Public\img\product\dong-ho.png" />
     <Content Include="Public\img\product\product-sm-1.png" />
     <Content Include="Public\img\product\product-sm-2.png" />
     <Content Include="Public\img\product\product-sm-3.png" />
@@ -465,6 +472,8 @@
     <Content Include="Public\img\supplier\12345.jpg" />
     <Content Include="Public\img\supplier\1234635.png" />
     <Content Include="Public\img\supplier\Anh 4k.jpg" />
+    <Content Include="Public\img\supplier\anh-china.jpg" />
+    <Content Include="Public\img\supplier\anh-cosplayer.jpg" />
     <Content Include="Public\img\supplier\Screenshot 2023-09-28 164831.png" />
     <Content Include="Public\img\supplier\Screenshot 2023-09-28 165030.png" />
     <Content Include="Public\img\supplier\Screenshot 2023-10-06 161356.png" />
@@ -2770,7 +2779,6 @@
     <Content Include="Areas\Admin\Views\Menu\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\Menu\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Menu\Trash.cshtml" />
-    <Content Include="Areas\Admin\Views\Page\Trash.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -2942,6 +2950,10 @@
     <Content Include="Views\Site\Index.cshtml" />
     <Content Include="Views\Module\MainMenu.cshtml" />
     <Content Include="Views\Site\Home.cshtml" />
+    <Content Include="Views\Module\MainMenuSub_0.cshtml" />
+    <Content Include="Views\Module\MainMenuSub_1.cshtml" />
+    <Content Include="Views\Module\MenuFooter.cshtml" />
+    <Content Include="Views\Site\ProductCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

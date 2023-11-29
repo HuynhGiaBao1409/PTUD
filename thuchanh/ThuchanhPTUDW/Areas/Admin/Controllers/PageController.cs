@@ -267,45 +267,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         {
             return View(postsDAO.getList("Trash", "page"));
         }
-        /////////////////////////////////////////////////////////////////////////////////////
-        // GET: Admin/Page/Recover/5:Chuyen trang thai Status = 0 thanh =2
-        public ActionResult Recover(int? id)
-        {
-            if (id == null)
-            {
-                //Thong bao that bai
-                TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
-                //chuyen huong trang
-                return RedirectToAction("Index", "Page");
-            }
 
-            //khi nhap nut thay doi Status cho mot mau tin
-            Posts posts = postsDAO.getRow(id);
-            //kiem tra id cua categories co ton tai?
-            if (posts == null)
-            {
-                //Thong bao that bai
-                TempData["message"] = new XMessage("danger", "Phục hồi dữ liệu thất bại");
-
-                //chuyen huong trang
-                return RedirectToAction("Index", "Page");
-            }
-            //thay doi trang thai Status tu 1 thanh 2 va nguoc lai
-            posts.Status = 2;
-
-            //cap nhat gia tri cho UpdateAt/By
-            posts.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
-            posts.UpdateAt = DateTime.Now;
-
-            //Goi ham Update trong postsDAO
-            postsDAO.Update(posts);
-
-            //Thong bao thanh cong
-            TempData["message"] = new XMessage("success", "Phục hồi dữ liệu thành công");
-
-            //khi cap nhat xong thi chuyen ve Trash
-            return RedirectToAction("Trash", "Page");
-        }
         /////////////////////////////////////////////////////////////////////////////////////
         // GET: Admin/Page/Recover/5:Chuyen trang thai Status = 0 thanh =2
         public ActionResult Undo(int? id)
