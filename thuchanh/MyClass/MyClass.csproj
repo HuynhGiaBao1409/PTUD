@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="DAO\CategoriesDAO.cs" />
     <Compile Include="DAO\LinkDAO.cs" />
-    <Compile Include="DAO\MenusDB.cs" />
+    <Compile Include="DAO\MenusDAO.cs" />
     <Compile Include="DAO\PostDAO.cs" />
     <Compile Include="DAO\ProductDAO.cs" />
     <Compile Include="DAO\SlidersDAO.cs" />

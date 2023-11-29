@@ -31,12 +31,14 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["message"] = new XMessage("danger", "Không tìm thấy bài viết");
+                return RedirectToAction("Index");
             }
             Posts posts = db.Posts.Find(id);
             if (posts == null)
             {
-                return HttpNotFound();
+                TempData["message"] = new XMessage("danger", "Không tìm thấy loại hàng");
+                return RedirectToAction("Index");
             }
             return View(posts);
         }
@@ -124,7 +126,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 //Thong bao that bai
                 TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
                 //chuyen huong trang
-                return RedirectToAction("Index", "Post");
+                return RedirectToAction("Index");
             }
 
             //khi nhap nut thay doi Status cho mot mau tin
@@ -136,7 +138,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
 
                 //chuyen huong trang
-                return RedirectToAction("Index", "Post");
+                return RedirectToAction("Index");
             }
             //thay doi trang thai Status tu 1 thanh 2 va nguoc lai
             posts.Status = (posts.Status == 1) ? 2 : 1;
@@ -152,7 +154,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             TempData["message"] = new XMessage("success", "Cập nhật trạng thái thành công");
 
             //khi cap nhat xong thi chuyen ve Index
-            return RedirectToAction("Index", "Post");
+            return RedirectToAction("Index");
         }
 
         // GET: Admin/Post/Edit/5
@@ -162,14 +164,16 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
 
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["message"] = new XMessage("danger", "Cập nhật thông tin thất bại");
+                return RedirectToAction("Index");
             }
 
             Posts posts = postsDAO.getRow(id);
 
             if (posts == null)
             {
-                return HttpNotFound();
+                TempData["message"] = new XMessage("danger", "Cập nhật thông tin thất bại");
+                return RedirectToAction("Index");
             }
 
             return View(posts);
@@ -248,12 +252,14 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["message"] = new XMessage("danger", "Xóa danh mục thất bại");
+                return RedirectToAction("Index");
             }
             Posts posts = postsDAO.getRow(id);
             if (posts == null)
             {
-                return HttpNotFound();
+                TempData["message"] = new XMessage("danger", "Xóa danh mục thất bại");
+                return RedirectToAction("Index");
             }
             return View(posts);
         }

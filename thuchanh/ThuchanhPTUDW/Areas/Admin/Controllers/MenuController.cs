@@ -14,59 +14,58 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
 {
     public class MenuController : Controller
     {
+        //Goi 4 lop DAO can thuc thi
         CategoriesDAO categoriesDAO = new CategoriesDAO();
-        SuppliersDAO suppliersDAO = new SuppliersDAO();
-        ProductDAO productsDAO = new ProductDAO();
-        MenusDAO menusDAO = new MenusDAO();
         TopicsDAO topicsDAO = new TopicsDAO();
         PostDAO postsDAO = new PostDAO();
-        /// /////////////////////////////////////////////////////////////
-        // GET: Admin/Menu/Index
+        MenusDAO menusDAO = new MenusDAO();
+        SuppliersDAO suppliersDAO = new SuppliersDAO();//neu thich thi lam
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Menu
         public ActionResult Index()
         {
-            ViewBag.CatList = categoriesDAO.getList("Index");
-            ViewBag.SupList = suppliersDAO.getList("Index");
-            ViewBag.ProList = productsDAO.getList("Index");
-            ViewBag.TopList = topicsDAO.getList("Index");
-            ViewBag.PosList = postsDAO.getList("Index", "Page");
-            List<Menus> menu = menusDAO.getList("Index");
-            return View(menusDAO.getList("Index"));
+            ViewBag.CatList = categoriesDAO.getList("Index");//select * from Categories voi Status !=0
+            ViewBag.TopList = topicsDAO.getList("Index");//select * from Topics voi Status !=0
+            ViewBag.PosList = postsDAO.getList("Index", "Page");//select * from Posts voi Status !=0
+            List<Menus> menu = menusDAO.getList("Index");//select * from Menus voi Status !=0
+            return View("Index", menu);//truyen menu duoi dang model
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        // POST: Admin/Menu/Create
         [HttpPost]
         public ActionResult Index(FormCollection form)
         {
-            //Them Loai san pham
-            if (!string.IsNullOrEmpty(form["ThemCategory"]))
+            //-------------------------Category------------------------//
+            //Xu ly cho nút ThemCategory ben Index
+            if (!string.IsNullOrEmpty(form["ThemCategory"]))//nut ThemCategory duoc nhan
             {
-                //kiem tra dau check cua muc con
-                if (!string.IsNullOrEmpty(form["nameCategory"]))
+                if (!string.IsNullOrEmpty(form["nameCategory"]))//check box được nhấn
                 {
                     var listitem = form["nameCategory"];
-                    //chuyen danh sach thanh dang mang: 1,2,3,4...
-                    var listarr = listitem.Split(',');//ngat mang thanh tung phan tu cach nhau boi dau ,
-                    foreach (var row in listarr)
+                    //chuyen danh sach thanh dang mang: vi du 1,2,3,...
+                    var listarr = listitem.Split(',');//cat theo dau ,
+                    foreach (var row in listarr)//row = id cua các mau tin
                     {
                         int id = int.Parse(row);//ep kieu int
                         //lay 1 ban ghi
                         Categories categories = categoriesDAO.getRow(id);
-                        //ta ra menu
+                        //tao ra menu
                         Menus menu = new Menus();
                         menu.Name = categories.Name;
                         menu.Link = categories.Slug;
+                        menu.TableId = categories.Id;
                         menu.TypeMenu = "category";
                         menu.Position = form["Position"];
-                        menu.ParentID = 0;
+                        menu.ParentId = 0;
                         menu.Order = 0;
-                        menu.CreateAt = DateTime.Now;
                         menu.CreateBy = Convert.ToInt32(Session["UserID"].ToString());
-                        menu.UpdateAt = DateTime.Now;
-                        menu.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
-                        menu.Status = 2; //tam thoi chua xuat ban
-                        //Them vao DB
+                        menu.CreateAt = DateTime.Now;
+                        menu.Status = 2;//chưa xuất bản
                         menusDAO.Insert(menu);
                     }
-                    TempData["message"] = new XMessage("success", "Thêm vào menu thành công");
+                    TempData["message"] = new XMessage("success", "Thêm menu danh mục thành công");
                 }
                 else
                 {
@@ -74,257 +73,171 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 }
             }
 
-            //Them Nha cung cap
-            if (!string.IsNullOrEmpty(form["ThemSupplier"]))
+            //-------------------------Topic------------------------//
+            //Xu ly cho nút ThemTopic ben Index
+            if (!string.IsNullOrEmpty(form["ThemTopic"]))//nut ThemCategory duoc nhan
             {
-                //kiem tra dau check cua muc con
-                if (!string.IsNullOrEmpty(form["nameSupplier"]))
-                {
-                    var listitem = form["nameSupplier"];
-                    //chuyen danh sach thanh dang mang: 1,2,3,4...
-                    var listarr = listitem.Split(',');//ngat mang thanh tung phan tu cach nhau boi dau ,
-                    foreach (var row in listarr)
-                    {
-                        int id = int.Parse(row);//ep kieu int
-                        //lay 1 ban ghi
-                        Suppliers suppliers = suppliersDAO.getRow(id);
-                        //ta ra menu
-                        Menus menu = new Menus();
-                        menu.Name = suppliers.Name;
-                        menu.Link = suppliers.Slug;
-                        menu.TypeMenu = "supplier";
-                        menu.Position = form["Position"];
-                        menu.ParentID = 0;
-                        menu.Order = 0;
-                        menu.CreateAt = DateTime.Now;
-                        menu.CreateBy = Convert.ToInt32(Session["UserID"].ToString());
-                        menu.UpdateAt = DateTime.Now;
-                        menu.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
-                        menu.Status = 2; //tam thoi chua xuat ban
-                        //Them vao DB
-                        menusDAO.Insert(menu);
-                    }
-                    TempData["message"] = new XMessage("success", "Thêm vào menu thành công");
-                }
-                else
-                {
-                    TempData["message"] = new XMessage("danger", "Chưa chọn nhà cung cấp");
-                }
-            }
-
-            //Them San pham
-            if (!string.IsNullOrEmpty(form["ThemProduct"]))
-            {
-                //kiem tra dau check cua muc con
-                if (!string.IsNullOrEmpty(form["nameProduct"]))
-                {
-                    var listitem = form["nameProduct"];
-                    //chuyen danh sach thanh dang mang: 1,2,3,4...
-                    var listarr = listitem.Split(',');//ngat mang thanh tung phan tu cach nhau boi dau ,
-                    foreach (var row in listarr)
-                    {
-                        int id = int.Parse(row);//ep kieu int
-                        //lay 1 ban ghi
-                        Products products = productsDAO.getRow(id);
-                        //ta ra menu
-                        Menus menu = new Menus();
-                        menu.Name = products.Name;
-                        menu.Link = products.Slug;
-                        menu.TypeMenu = "product";
-                        menu.Position = form["Position"];
-                        menu.ParentID = 0;
-                        menu.Order = 0;
-                        menu.CreateAt = DateTime.Now;
-                        menu.CreateBy = Convert.ToInt32(Session["UserID"].ToString());
-                        menu.UpdateAt = DateTime.Now;
-                        menu.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
-                        menu.Status = 2; //tam thoi chua xuat ban
-                        //Them vao DB
-                        menusDAO.Insert(menu);
-                    }
-                    TempData["message"] = new XMessage("success", "Thêm vào menu thành công");
-                }
-                else
-                {
-                    TempData["message"] = new XMessage("danger", "Chưa chọn sản phẩm");
-                }
-            }
-            //Them Topic
-            if (!string.IsNullOrEmpty(form["ThemTopic"]))
-            {
-                //kiem tra dau check cua muc con
-                if (!string.IsNullOrEmpty(form["nameTopic"]))
+                if (!string.IsNullOrEmpty(form["nameTopic"]))//check box được nhấn
                 {
                     var listitem = form["nameTopic"];
-                    var listarr = listitem.Split(',');
-                    foreach (var row in listarr)
+                    //chuyen danh sach thanh dang mang: vi du 1,2,3,...
+                    var listarr = listitem.Split(',');//cat theo dau ,
+                    foreach (var row in listarr)//row = id cua các mau tin
                     {
                         int id = int.Parse(row);//ep kieu int
-                        //lay 1 ban ghi
+                                                //lay 1 ban ghi
                         Topics topics = topicsDAO.getRow(id);
-                        //ta ra menu
+                        //tao ra menu
                         Menus menu = new Menus();
                         menu.Name = topics.Name;
                         menu.Link = topics.Slug;
-                        menu.TableID = topics.Id;
-                        menu.TypeMenu = "topics";
+                        menu.TableId = topics.Id;
+                        menu.TypeMenu = "topic";
                         menu.Position = form["Position"];
-                        menu.ParentID = 0;
+                        menu.ParentId = 0;
                         menu.Order = 0;
-                        menu.CreateAt = DateTime.Now;
                         menu.CreateBy = Convert.ToInt32(Session["UserID"].ToString());
-                        menu.UpdateAt = DateTime.Now;
-                        menu.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
-                        menu.Status = 2; //tam thoi chua xuat ban
-                        //Them vao DB
+                        menu.CreateAt = DateTime.Now;
+                        menu.Status = 2;//chưa xuất bản
                         menusDAO.Insert(menu);
                     }
-                    TempData["message"] = new XMessage("success", "Thêm vào menu thành công");
+                    TempData["message"] = new XMessage("success", "Thêm menu chủ đề bài viết thành công");
                 }
                 else
                 {
-                    TempData["message"] = new XMessage("danger", "Chưa chọn sản phẩm");
+                    TempData["message"] = new XMessage("danger", "Chưa chọn danh mục chủ đề bài viết");
                 }
             }
-            //Them Page
 
-            //Them Custom
+            //-------------------------Page------------------------//
+            //Xử lý cho nut Thempage ben Index
+            if (!string.IsNullOrEmpty(form["ThemPage"]))
+            {
+                if (!string.IsNullOrEmpty(form["namePage"]))//check box được nhấn tu phia Index
+                {
+                    var listitem = form["namePage"];
+                    //chuyen danh sach thanh dang mang: vi du 1,2,3,...
+                    var listarr = listitem.Split(',');//cat theo dau ,
+                    foreach (var row in listarr)//row = id cua các mau tin
+                    {
+                        int id = int.Parse(row);//ep kieu int
+                        Posts post = postsDAO.getRow(id);
+                        //tao ra menu
+                        Menus menu = new Menus();
+                        menu.Name = post.Title;
+                        menu.Link = post.Slug;
+                        menu.TableId = post.Id;
+                        menu.TypeMenu = "page";
+                        menu.Position = form["Position"];
+                        menu.ParentId = 0;
+                        menu.Order = 0;
+                        menu.CreateBy = Convert.ToInt32(Session["UserID"].ToString());
+                        menu.CreateAt = DateTime.Now;
+                        menu.Status = 2;//chưa xuất bản
+                        menusDAO.Insert(menu);
+                    }
+                    TempData["message"] = new XMessage("success", "Thêm menu bài viết thành công");
+                }
+                else//check box chưa được nhấn
+                {
+                    TempData["message"] = new XMessage("danger", "Chưa chọn danh mục trang đơn");
+                }
+            }
+
+            //-------------------------Custom------------------------//
+            //Xử lý cho nút ThemCustom ben Index
             if (!string.IsNullOrEmpty(form["ThemCustom"]))
             {
-                //kiem tra dau check cua muc con
-                if (!string.IsNullOrEmpty(form["nameCustom"]) && !string.IsNullOrEmpty(form["linkCustom"]))
+                if (!string.IsNullOrEmpty(form["name"]) && !string.IsNullOrEmpty(form["link"]))
+                //o name, link text được gõ tu phia Index
                 {
-                    //tao ra menu custom
-                    Menus menu = new Menus();
-                    menu.Name = form["nameCustom"];
-                    menu.Link = form["linkCustom"];
-                    menu.TypeMenu = "custom";
-                    menu.Position = form["Position"];
-                    menu.ParentID = 0;
-                    menu.Order = 0;
-                    menu.CreateAt = DateTime.Now;
-                    menu.CreateBy = Convert.ToInt32(Session["UserID"].ToString());
-                    menu.UpdateAt = DateTime.Now;
-                    menu.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
-                    menu.Status = 2; //tam thoi chua xuat ban
-                    //Them vao DB
-                    menusDAO.Insert(menu);
+                    //tao ra menu
+                    Menus menus = new Menus();
+                    menus.Name = form["name"];//lay tu o nhap du lieu (form)
+                    menus.Link = form["link"];//lay tu o nhap du lieu (form)
+                    //menu.TableId = post.Id;//vi Table Id allow NULL nen bỏ đi
+                    menus.TypeMenu = "custom";
+                    menus.Position = form["Position"];
+                    menus.ParentId = 0;
+                    menus.Order = 0;
+                    menus.CreateBy = Convert.ToInt32(Session["UserID"].ToString());
+                    menus.CreateAt = DateTime.Now;
+                    menus.Status = 2;//chưa xuất bản
+                    menusDAO.Insert(menus);
 
-                    TempData["message"] = new XMessage("success", "Thêm vào menu thành công");
+                    TempData["message"] = new XMessage("success", "Thêm danh mục thành công");
                 }
-                else
+
+                else//check box chưa được nhấn
                 {
-                    TempData["message"] = new XMessage("danger", "Chưa đầy đủ thông tin cho menu");
+                    TempData["message"] = new XMessage("danger", "Chưa đủ thông tin cho mục tùy chọn Menu");
                 }
             }
 
-            //tra ve trang Index
             return RedirectToAction("Index", "Menu");
         }
-        ////////////////////////////////////////////////////////////////
-        //GET: Admin/Menu/Status/5
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Menu/Status
         public ActionResult Status(int? id)
         {
             if (id == null)
             {
-                //thong bao that bai
-                TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
+                TempData["message"] = new XMessage("danger", "Cập nhật không thành công");
                 return RedirectToAction("Index");
             }
-            //truy van dong co id = id yeu cau
             Menus menus = menusDAO.getRow(id);
             if (menus == null)
             {
-                //thong bao that bai
-                TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
+                TempData["message"] = new XMessage("danger", "Cập nhật không thành công");
                 return RedirectToAction("Index");
             }
-            else
-            {
-                //chuyen doi trang thai cua Satus tu 1<->2
-                menus.Status = (menus.Status == 1) ? 2 : 1;
-
-                //cap nhat gia tri UpdateAt
-                menus.UpdateAt = DateTime.Now;
-
-                //cap nhat lai DB
-                menusDAO.Update(menus);
-
-                //thong bao cap nhat trang thai thanh cong
-                TempData["message"] = TempData["message"] = new XMessage("success", "Cập nhật trạng thái thành công");
-
-                return RedirectToAction("Index");
-            }
+            menus.UpdateAt = DateTime.Now;
+            menus.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
+            menus.Status = (menus.Status == 1) ? 2 : 1;
+            menusDAO.Update(menus);
+            TempData["message"] = new XMessage("success", "Cập nhật thành công");
+            return RedirectToAction("Index");
         }
 
-
-        ////////////////////////////////////////////////////////////////
-        // GET: Admin/Menu/Details/5
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Admin/Menus/Detail: Hien thi mot mau tin
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                //thong bao that bai
-                TempData["message"] = new XMessage("danger", "Không tìm thấy menu");
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Menus menus = menusDAO.getRow(id);
             if (menus == null)
             {
-                //thong bao that bai
-                TempData["message"] = new XMessage("danger", "Không tìm thấy menu");
-                return RedirectToAction("Index");
+                return HttpNotFound();
             }
             return View(menus);
         }
 
-        // GET: Admin/Menu/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Admin/Menu/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,TableID,TypeMenu,Position,Link,ParentID,Order,CreateAt,CreateBy,UpdateAt,UpdateBy,Status")] Menus menus)
-        {
-            if (ModelState.IsValid)
-            {
-                menusDAO.Insert(menus);
-                return RedirectToAction("Index");
-            }
-
-            return View(menus);
-        }
-
-        // GET: Admin/Menu/Edit/5
+        /////////////////////////////////////////////////////////////////////////////////////
+        // Admin/Menu/Edit: Thay doi mot mau tin
         public ActionResult Edit(int? id)
         {
+
             ViewBag.ParentList = new SelectList(menusDAO.getList("Index"), "Id", "Name");
             ViewBag.OrderList = new SelectList(menusDAO.getList("Index"), "Order", "Name");
 
             if (id == null)
             {
-                TempData["message"] = new XMessage("danger", "Không tìm thấy menu");
-                return RedirectToAction("Index");
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             Menus menus = menusDAO.getRow(id);
 
             if (menus == null)
             {
-                TempData["message"] = new XMessage("danger", "Không tìm thấy menu");
-                return RedirectToAction("Index");
+                return HttpNotFound();
             }
-            return View(menus);
+            return View("Edit", menus);
         }
 
-        // POST: Admin/Menu/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Menus menus)
@@ -332,9 +245,9 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
 
-                if (menus.ParentID == null)
+                if (menus.ParentId == null)
                 {
-                    menus.ParentID = 0;
+                    menus.ParentId = 0;
                 }
                 if (menus.Order == null)
                 {
@@ -349,7 +262,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                 menus.UpdateAt = DateTime.Now;
 
                 //Xy ly cho muc UpdateBy
-                menus.UpdateBy = Convert.ToInt32(Session["UserId"]);
+                menus.UpdateBy = Convert.ToInt32(Session["UserID"]);
 
                 //Thong bao thanh cong
                 TempData["message"] = new XMessage("success", "Cập nhật thành công");
@@ -364,38 +277,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             ViewBag.OrderList = new SelectList(menusDAO.getList("Index"), "Order", "Name");
             return View(menus);
         }
-        // GET: Admin/Menu/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                TempData["message"] = new XMessage("danger", "Không tìm thấy menu");
-                return RedirectToAction("Index");
-            }
-            Menus menus = menusDAO.getRow(id);
-            if (menus == null)
-            {
-                TempData["message"] = new XMessage("danger", "Không tìm thấy menu");
-                return RedirectToAction("Index");
-            }
-            return View(menus);
-        }
 
-        // POST: Admin/Menu/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Menus menus = menusDAO.getRow(id);
-
-            //tim thay mau tin thi xoa, cap nhat cho Links
-            menusDAO.Delete(menus);
-
-            //Thong bao thanh cong
-            TempData["message"] = new XMessage("success", "Xóa menu thành công");
-            //O lai trang thung rac
-            return RedirectToAction("Trash");
-        }
         /////////////////////////////////////////////////////////////////////////////////////
         // GET: Admin/Menu/DelTrash/5:Thay doi trang thai cua mau tin = 0
         public ActionResult DelTrash(int? id)
@@ -407,7 +289,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             menus.Status = 0;
 
             //cap nhat gia tri cho UpdateAt/By
-            menus.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
+            menus.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
             menus.UpdateAt = DateTime.Now;
 
             //Goi ham Update trong MenusDAO
@@ -419,6 +301,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             //khi cap nhat xong thi chuyen ve Index
             return RedirectToAction("Index", "Menu");
         }
+
         /////////////////////////////////////////////////////////////////////////////////////
         // GET: Admin/Menus/Trash/5:Hien thi cac mau tin có gia tri la 0
         public ActionResult Trash(int? id)
@@ -428,7 +311,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
 
         /////////////////////////////////////////////////////////////////////////////////////
         // GET: Admin/Menu/Recover/5:Thay doi trang thai cua mau tin
-        public ActionResult Recover(int? id)
+        public ActionResult Undo(int? id)
         {
             if (id == null)
             {
@@ -453,7 +336,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             menus.Status = 2;
 
             //cap nhat gia tri cho UpdateAt/By
-            menus.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
+            menus.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
             menus.UpdateAt = DateTime.Now;
 
             //Goi ham Update trong menusDAO
@@ -465,5 +348,39 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             //khi cap nhat xong thi chuyen ve Trash de phuc hoi tiep
             return RedirectToAction("Trash");
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Menu/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Menus menus = menusDAO.getRow(id);
+            if (menus == null)
+            {
+                return HttpNotFound();
+            }
+            return View(menus);
+        }
+
+        // POST: Admin/Menu/Delete/5:Xoa mot mau tin ra khoi CSDL
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Menus menus = menusDAO.getRow(id);
+
+            //tim thay mau tin thi xoa, cap nhat cho Links
+            menusDAO.Delete(menus);
+
+            //Thong bao thanh cong
+            TempData["message"] = new XMessage("success", "Xóa menu thành công");
+            //O lai trang thung rac
+            return RedirectToAction("Trash");
+        }
+
+
     }
 }

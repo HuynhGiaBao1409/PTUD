@@ -43,6 +43,7 @@ namespace MyClass.DAO
             return list;
         }
 
+
         /////////////////////////////////////////////////////////////////////////////////////
         //Hien thi danh sach 1 mau tin (ban ghi)
         public Posts getRow(int? id)

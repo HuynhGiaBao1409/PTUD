@@ -29,12 +29,14 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["message"] = new XMessage("danger", "Không tìm thấy thông tin");
+                return RedirectToAction("Index");
             }
             Topics topics = db.Topics.Find(id);
             if (topics == null)
             {
-                return HttpNotFound();
+                TempData["message"] = new XMessage("danger", "Không tìm thấy thông tin");
+                return RedirectToAction("Index");
             }
             return View(topics);
         }
@@ -107,14 +109,16 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
 
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["message"] = new XMessage("danger", "Cập nhật thông tin thất bại");
+                return RedirectToAction("Index");
             }
 
             Topics topics = topicsDAO.getRow(id);
 
             if (topics == null)
             {
-                return HttpNotFound();
+                TempData["message"] = new XMessage("danger", "Cập nhật thông tin thất bại");
+                return RedirectToAction("Index");
             }
 
             return View(topics);
@@ -283,12 +287,14 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["message"] = new XMessage("danger", "Xóa thông tin thất bại");
+                return RedirectToAction("Index");
             }
             Topics topics = topicsDAO.getRow(id);
             if (topics == null)
             {
-                return HttpNotFound();
+                TempData["message"] = new XMessage("danger", "Xóa thông tin thất bại");
+                return RedirectToAction("Index");
             }
             return View(topics);
         }

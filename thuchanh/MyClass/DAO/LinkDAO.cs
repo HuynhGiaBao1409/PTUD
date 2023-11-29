@@ -1,60 +1,60 @@
-﻿using System;
+﻿using MyClass.Model;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.Entity;
-using MyClass.Model;
 
 namespace MyClass.DAO
 {
     public class LinkDAO
     {
         private MyDBContext db = new MyDBContext();
-        /////////////////////////////////////////////////////////////////////////////////////
-        //Hien thi danh sach toan bo Loai san pham: SELCT * FROM
+
+        public List<Links> getList()
+        {
+            return db.Links.ToList();
+        }
+        //Hiển thị danh sách toàn bộ Loại sản phẩm: SELCT * FROM
         public List<Links> getList(string status = "All")
         {
             List<Links> list = null;
-
-
             return list;
         }
-        /////////////////////////////////////////////////////////////////////////////////////
-        //Hien thi danh sach 1 mau tin (ban ghi)
+        //Hiển thị danh sách 1 mẩu tin (bản ghi)
         public Links getRow(int tableid, string typelink)
         {
             return db.Links
                 .Where(m => m.TableId == tableid && m.Type == typelink)
                 .FirstOrDefault();
         }
-
         /////////////////////////////////////////////////////////////////////////////////////
-        //Hien thi danh sach 1 mau tin (ban ghi voi kieu du lieu la string slug cho URL)
+        //Hiển thị danh sách 1 mẩu tin (bản ghi) với kiểu string = slug
         public Links getRow(string slug)
         {
+
             return db.Links
                 .Where(m => m.Slug == slug)
                 .FirstOrDefault();
         }
         /////////////////////////////////////////////////////////////////////////////////////
-        ///Them moi mot mau tin
+        ///Thêm mới một mẩu tin
         public int Insert(Links row)
         {
             db.Links.Add(row);
             return db.SaveChanges();
         }
-
         /////////////////////////////////////////////////////////////////////////////////////
-        ///Cap nhat mot mau tin
+        ///Cập nhật một mẩu tin
         public int Update(Links row)
         {
             db.Entry(row).State = EntityState.Modified;
             return db.SaveChanges();
         }
-
         /////////////////////////////////////////////////////////////////////////////////////
-        ///Xoa mot mau tin Xoa ra khoi CSDL
+        ///Xoá một mẩu tin ra khỏi CSDL
         public int Delete(Links row)
         {
             db.Links.Remove(row);

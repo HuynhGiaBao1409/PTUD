@@ -16,10 +16,10 @@ namespace ThuchanhPTUDW.Controllers
         {
             return View();
         }
-        public ActionResult MainMenu()
-        {
-            List<Menus> list = menusDAO.getListByParentId(0);
-            return View(list);
-        }
+        //public ActionResult MainMenu()
+        //{
+        //    List<Menus> list = menusDAO.getListByParentId(0);
+        //    return View(list);
+        //}
     }
 }

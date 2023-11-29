@@ -1,17 +1,19 @@
-﻿@model IEnumerable<MyClass.Model.Menus>
+﻿
+@model IEnumerable<MyClass.Model.Menus>
 @{
     ViewBag.Title = "Danh sách Menu đã xóa";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-@section header {
-    <link href="~/Public/css/cdn.datatables.net_1.13.6_css_jquery.dataTables.min.css" rel="stylesheet" />
+@section header{
+    <link rel="stylesheet" href="~/Public/css/jquery.dataTables.min.css" />
 }
 
-@section footer {
-    <script src="~/Public/js/cdn.datatables.net_1.13.6_js_jquery.dataTables.min.js"></script>
+@section footer{
+    <script src="~/Public/js/jquery.dataTables.min.js"></script>
     <script>let table = new DataTable('#myTable');</script>
 }
+
 
 @*Khai báo form để truyền dữ liệu sau khi nhấn nút thêm menu*@
 @using (Html.BeginForm())
@@ -61,7 +63,7 @@
                                         <td>@Html.DisplayFor(modelItem => item.Order)</td>
                                         <td>@Html.DisplayFor(modelItem => item.Id)</td>
                                         <td>
-                                            <a href="@Url.Action("Recover", "Menu", new { id = item.Id })" class="btn-sm btn-info"> <i class="fa fa-undo"></i></a>
+                                            <a href="@Url.Action("Undo", "Menu", new { id = item.Id })" class="btn-sm btn-info"> <i class="fa fa-undo"></i></a>
                                             <a href="@Url.Action("Delete", "Menu", new { id = item.Id })" class="btn-sm btn-danger"> <i class="fa fa-trash"></i></a>
                                         </td>
                                     </tr>

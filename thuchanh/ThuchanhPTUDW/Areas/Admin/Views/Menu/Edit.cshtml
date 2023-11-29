@@ -6,6 +6,7 @@
 }
 
 
+
 @using (Html.BeginForm("Edit", "Menu"))
 {
     @Html.AntiForgeryToken()
@@ -14,7 +15,7 @@
     @Html.HiddenFor(model => model.CreateAt);
     @Html.HiddenFor(model => model.CreateBy);
     @Html.HiddenFor(model => model.TypeMenu);
-    @Html.HiddenFor(model => model.TableID);
+    @Html.HiddenFor(model => model.TableId);
 
 
     <!-- Content Wrapper. Contains page content -->
@@ -90,8 +91,8 @@
                             <div class="form-group">
                                 <label>Cấp cha <span class="text-danger"></span></label>
                                 <div class="col-md-10">
-                                    @Html.DropDownListFor(model => model.ParentID, (SelectList)@ViewBag.ParentList, "Cấp 0", new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.ParentID, "", new { @class = "text-danger" })
+                                    @Html.DropDownListFor(model => model.ParentId, (SelectList)@ViewBag.ParentList, "Cấp 0", new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ParentId, "", new { @class = "text-danger" })
                                 </div>
                             </div>
 

@@ -48,7 +48,10 @@ namespace MyClass.DAO
             return list;
         }
 
-
+        public Products getRow(string slug)
+        {
+            return db.Products.Where(m=>m.Slug == slug && m.Status==1).FirstOrDefault();
+        }
         //details
         public Products getRow(int? id)
         {

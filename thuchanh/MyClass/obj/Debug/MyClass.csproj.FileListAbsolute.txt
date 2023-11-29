@@ -58,3 +58,15 @@ D:\App_web\PTUD\thuchanh\MyClass\obj\Debug\MyClass.csproj.CoreCompileInputs.cach
 D:\App_web\PTUD\thuchanh\MyClass\obj\Debug\MyClass.csproj.CopyComplete
 D:\App_web\PTUD\thuchanh\MyClass\obj\Debug\MyClass.dll
 D:\App_web\PTUD\thuchanh\MyClass\obj\Debug\MyClass.pdb
+D:\phattrienungdungweb\a\thuchanh\MyClass\bin\Debug\MyClass.dll.config
+D:\phattrienungdungweb\a\thuchanh\MyClass\bin\Debug\MyClass.dll
+D:\phattrienungdungweb\a\thuchanh\MyClass\bin\Debug\MyClass.pdb
+D:\phattrienungdungweb\a\thuchanh\MyClass\bin\Debug\EntityFramework.dll
+D:\phattrienungdungweb\a\thuchanh\MyClass\bin\Debug\EntityFramework.SqlServer.dll
+D:\phattrienungdungweb\a\thuchanh\MyClass\bin\Debug\EntityFramework.xml
+D:\phattrienungdungweb\a\thuchanh\MyClass\bin\Debug\EntityFramework.SqlServer.xml
+D:\phattrienungdungweb\a\thuchanh\MyClass\obj\Debug\MyClass.csproj.AssemblyReference.cache
+D:\phattrienungdungweb\a\thuchanh\MyClass\obj\Debug\MyClass.csproj.CoreCompileInputs.cache
+D:\phattrienungdungweb\a\thuchanh\MyClass\obj\Debug\MyClass.csproj.CopyComplete
+D:\phattrienungdungweb\a\thuchanh\MyClass\obj\Debug\MyClass.dll
+D:\phattrienungdungweb\a\thuchanh\MyClass\obj\Debug\MyClass.pdb

@@ -13,8 +13,6 @@ namespace MyClass.Model
     {
         [Key]
         public int Id { get; set; }
-        [Display(Name = "Tên liên kết")]
-        public string Name { get; set; }
         [Display(Name = "URL")]
         public string Slug { get; set; }
         [Required(ErrorMessage = "ID bảng liên kết không được để trống")]

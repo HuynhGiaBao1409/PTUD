@@ -1,18 +1,18 @@
-﻿﻿@model MyClass.Model.Posts
+﻿@model MyClass.Model.Posts
 
 @{
     ViewBag.Title = "Xác nhận xóa trang đơn";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-@section header {
-    <link href="~/Public/css/cdn.datatables.net_1.13.6_css_jquery.dataTables.min.css" rel="stylesheet" />
+@section header{
+    <link href="~/Public/css/jquery.dataTables.min.css" rel="stylesheet" />
 }
-
-@section footer {
-    <script src="~/Public/js/cdn.datatables.net_1.13.6_js_jquery.dataTables.min.js"></script>
+@section footer{
+    <script src="~/Public/js/jquery.dataTables.min.js"></script>
     <script>let table = new DataTable('#myTable');</script>
 }
+
 
 @using (Html.BeginForm())
 {
