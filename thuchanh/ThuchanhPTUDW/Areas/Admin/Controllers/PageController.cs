@@ -7,336 +7,327 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MyClass.Model;
+using MyClass.DAO;
 using ThuchanhPTUDW.Library;
 using System.IO;
-using MyClass.DAO;
 
 namespace ThuchanhPTUDW.Areas.Admin.Controllers
 {
     public class PageController : Controller
     {
-        private MyDBContext db = new MyDBContext();
         PostDAO postsDAO = new PostDAO();
         LinkDAO linksDAO = new LinkDAO();
-
-        // GET: Admin/Page
+        //Page khôgn có Chủ đề - Topic
+        /////////////////////////////////////////////////////////////////////////////////////
+        //Trả về dan hsasch các mẩu tin
         public ActionResult Index()
         {
-            return View(postsDAO.getList("Index", "Page"));
+            return View(postsDAO.getList("Index", "Page")); //Hiển thị toàn bộ danh sách trang đơn
         }
-
-        // GET: Admin/Page/Details/5
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Page/Details/5: Hiển thị một mẩu tin
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                TempData["message"] = new XMessage("danger", "Không tìm thấy trang đơn");
+                return RedirectToAction("Index");
             }
-            Posts posts = db.Posts.Find(id);
+            Posts posts = postsDAO.getRow(id);
             if (posts == null)
             {
-                return HttpNotFound();
+                TempData["message"] = new XMessage("danger", "Không tìm thấy trang đơn");
+                return RedirectToAction("Index");
             }
             return View(posts);
         }
-
-        // GET: Admin/Page/Create
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Page/Create: Thêm một mẩu tin
         public ActionResult Create()
         {
             return View();
         }
-
-        // POST: Admin/Post/Create: Them moi mot mau tin
+        // POST: Admin/Page/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Posts posts)
         {
             if (ModelState.IsValid)
             {
-                //Xu ly cho muc Slug
+                //Xử lý cho mục Slug
                 posts.Slug = XString.Str_Slug(posts.Title);
-                //chuyen doi dua vao truong Name de loai bo dau, khoang cach = dau -
-
-                //xu ly cho phan upload hình ảnh
-                var img = Request.Files["img"];//lay thong tin file
+                //Chuyển đổi đưua vào trường Name để lạoi bỏ dấu, khoảng cách = dấu -
+                //Xử lý cho phần Upload hình ảnh
+                var img = Request.Files["img"]; //Lấy thông tin File
                 if (img.ContentLength != 0)
                 {
                     string[] FileExtentions = new string[] { ".jpg", ".jpeg", ".png", ".gif" };
-                    //kiem tra tap tin co hay khong
+                    //Kiểm tra tập tin có hay không
                     if (FileExtentions.Contains(img.FileName.Substring(img.FileName.LastIndexOf("."))))//lay phan mo rong cua tap tin
                     {
                         string slug = posts.Slug;
                         string id = posts.Id.ToString();
-                        //Chinh sua sau khi phat hien dieu chua dung cua Edit: them Id
-                        //ten file = Slug + Id + phan mo rong cua tap tin
+                        //Chỉnh sửa sau khi phát hiện điều chưa dùng của Edit: Thêm ID
+                        //Tên file = Slug + ID + phần mở rộng của tập tin
                         string imgName = slug + id + img.FileName.Substring(img.FileName.LastIndexOf("."));
                         posts.Image = imgName;
-
-                        string PathDir = "~/Public/img/page/";
+                        string PathDir = "~/Pulbic/img/page/";
                         string PathFile = Path.Combine(Server.MapPath(PathDir), imgName);
-                        //upload hinh
+                        //Upload Hình
                         img.SaveAs(PathFile);
                     }
-                }//ket thuc phan upload hinh anh
+                }//Kết thúc phần Upload hình ảnh
 
-                //-----Order
-                if (posts.Order == null)
-                {
-                    posts.Order = 1;
-                }
-                else
-                {
-                    posts.Order = posts.Order + 1;
-                }
-                //xu ly cho muc PostType = page (doi voi Page)
+                //Xử lý cho mục PostType = Page (đối với Page)
                 posts.PostType = "page";
 
-                //Xu ly cho muc CreateAt
+                //Xử lý cho mục CreateAt
                 posts.CreateAt = DateTime.Now;
 
-                //Xu ly cho muc CreateBy
+                //Xử lý cho mục CreateBy
                 posts.CreateBy = Convert.ToInt32(Session["UserId"]);
-                //xu ly cho muc Topics
-                if (postsDAO.Insert(posts) == 1)//khi them du lieu thanh cong
+
+                //Xứ lý cho mục Topics
+                if (postsDAO.Insert(posts) == 1)    //Khi thêm dữ liệu thành công
                 {
                     Links links = new Links();
                     links.Slug = posts.Slug;
                     links.TableId = posts.Id;
-                    //cap nhat link cho page
+                    //Cập nhật Link cho Page
                     links.Type = "page";
                     linksDAO.Insert(links);
                 }
-
-                //Thong bao thanh cong
+                //Thông báo thành công
                 TempData["message"] = new XMessage("success", "Thêm trang đơn thành công");
                 return RedirectToAction("Index");
             }
-            //doi voi page thi khong co chu de:
-            //ViewBag.TopList = new SelectList(topicsDAO.getList("Index"), "Id", "Name");
             return View(posts);
         }
-
-        // GET: Admin/Page/Staus/5
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Page/Status/5
         public ActionResult Status(int? id)
         {
             if (id == null)
             {
-                //Thong bao that bai
+                //Thông báo thất bại
                 TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
-                //chuyen huong trang
+                //Chuyển hướng trang
                 return RedirectToAction("Index", "Page");
             }
 
-            //khi nhap nut thay doi Status cho mot mau tin
+            //Khi nhất nút thay đổi Status cho một mẩu tin
             Posts posts = postsDAO.getRow(id);
-            //kiem tra id cua posts co ton tai?
+            //Kiểm tra ID của posts có tồn tại?
             if (posts == null)
             {
-                //Thong bao that bai
+                //Thông báo thất bại
                 TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
 
-                //chuyen huong trang
+                //Chuyển hướng trang
                 return RedirectToAction("Index", "Page");
             }
-            //thay doi trang thai Status tu 1 thanh 2 va nguoc lai
+            //Thay đổi trạng thái Status từ 1 thành 2 và ngược lại
             posts.Status = (posts.Status == 1) ? 2 : 1;
 
-            //cap nhat gia tri cho UpdateAt/By
+            //Cập nhật giá trị cho UpdateAt/By
             posts.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
             posts.UpdateAt = DateTime.Now;
 
-            //Goi ham Update trong PostDAO
+            //Gọi hàm Update trong PostDAO
             postsDAO.Update(posts);
 
-            //Thong bao thanh cong
+            //Thông báo thành công
             TempData["message"] = new XMessage("success", "Cập nhật trạng thái thành công");
 
-            //khi cap nhat xong thi chuyen ve Index
+            //Khi cập nhật xong thì chuyển về Index
             return RedirectToAction("Index", "Page");
         }
-
+        /////////////////////////////////////////////////////////////////////////////////////
         // GET: Admin/Page/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Thông báo thất bại
+                TempData["message"] = new XMessage("danger", "Chỉnh sửa trang đơn thất bại");
+                //Chuyển hướng trang
+                return RedirectToAction("Index", "Page");
             }
-            Posts posts = db.Posts.Find(id);
+            Posts posts = postsDAO.getRow(id);
             if (posts == null)
             {
-                return HttpNotFound();
+                //Thông báo thất bại
+                TempData["message"] = new XMessage("danger", "Chỉnh sửa trang đơn thất bại");
+                //Chuyển hướng trang
+                return RedirectToAction("Index", "Page");
             }
             return View(posts);
         }
-
-        // POST: Admin/Page/Edit/5: Cap nhat mau tin
+        // POST: Admin/Page/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Posts posts)
         {
             if (ModelState.IsValid)
             {
-                //Xu ly cho muc Slug
+                //Xử lý cho mục Slug
                 posts.Slug = XString.Str_Slug(posts.Title);
-                //chuyen doi dua vao truong Name de loai bo dau, khoang cach = dau -
-
-                //xu ly cho phan upload hình ảnh
-                var img = Request.Files["img"];//lay thong tin file
+                //Chuyển đổi đưua vào trường Name để lạoi bỏ dấu, khoảng cách = dấu -
+                //Xử lý cho phần Upload hình ảnh
+                var img = Request.Files["img"]; //Lấy thông tin file
+                string PathDir = "~/Public/img/page/";
                 if (img.ContentLength != 0)
                 {
+                    //Update thì phải xoá ảnh cũ
+                    if (posts.Image != null)
+                    {
+                        string DelPath = Path.Combine(Server.MapPath(PathDir), posts.Image);
+                        System.IO.File.Delete(DelPath);
+                    }
                     string[] FileExtentions = new string[] { ".jpg", ".jpeg", ".png", ".gif" };
-                    //kiem tra tap tin co hay khong
+                    //Kiểm tra tập tin có hay không?
                     if (FileExtentions.Contains(img.FileName.Substring(img.FileName.LastIndexOf("."))))//lay phan mo rong cua tap tin
                     {
                         string slug = posts.Slug;
                         string id = posts.Id.ToString();
-                        //Chinh sua sau khi phat hien dieu chua dung cua Edit: them Id
-                        //ten file = Slug + Id + phan mo rong cua tap tin
+                        //Chỉnh sửa sau khi phát hiện điều chưa dùng của Edit: Thêm ID
+                        //Tên file = Slug + ID + phần mở rộng của tập tin
                         string imgName = slug + id + img.FileName.Substring(img.FileName.LastIndexOf("."));
                         posts.Image = imgName;
-
-                        string PathDir = "~/Public/img/page/";
                         string PathFile = Path.Combine(Server.MapPath(PathDir), imgName);
-                        //upload hinh
+                        //Upload hình
                         img.SaveAs(PathFile);
                     }
-                }//ket thuc phan upload hinh anh
+                }//Kết thúc phần Upload hình ảnh
 
-                ////xu ly cho muc PostType = page (doi voi Page)
-                //posts.PostType = "page";
-
-                //Xu ly cho muc UpdateAt
+                //Xử lý cho mục UpdateAt
                 posts.UpdateAt = DateTime.Now;
 
-                //Xu ly cho muc UpdateBy
+                //Xử lý cho mục UpdateBy
                 posts.UpdateBy = Convert.ToInt32(Session["UserId"]);
-                //xu ly cho muc Links
-                if (postsDAO.Update(posts) == 1)//khi sua du lieu thanh cong
+
+                //Xử lý cho mục Links
+                if (postsDAO.Update(posts) == 1)//Khi sửa dữ liệu thành công
                 {
                     Links links = new Links();
                     links.Slug = posts.Slug;
                     links.TableId = posts.Id;
-                    //thoi doi thong tin kieu Page
+                    //Thay đổi thông tin kiểu Page
                     links.Type = "page";
                     linksDAO.Insert(links);
                 }
-                //Thong bao thanh cong
-                TempData["message"] = new XMessage("success", "Sửa trang đơn thành công");
+                //Thông báo thành công
+                TempData["message"] = new XMessage("success", "Chỉnh sửa trang đơn thành công");
                 return RedirectToAction("Index");
             }
-            //doi voi page thi khong co chu de:
-            //ViewBag.TopList = new SelectList(topicsDAO.getList("Index"), "Id", "Name");
             return View(posts);
         }
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Page/DelTrash/5:Thay đổi trạng thái của mẩu tin = 0
+        public ActionResult DelTrash(int? id)
+        {
+            //Khi nhấp nút thay đổi Status cho một mẩu tin
+            Posts posts = postsDAO.getRow(id);
+            //Thay đổi trạng thái Status từ 1,2 thành 0
+            posts.Status = 0;
+            //Cập nhật giá trị cho UpdateAt/By
+            posts.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
+            posts.UpdateAt = DateTime.Now;
+            //Gọi hàm Update trong PostDAO
+            postsDAO.Update(posts);
+            //Thông báo thành công
+            TempData["message"] = new XMessage("success", "Xóa trang đơn thành công");
+            //Chuyển hướng trang
+            return RedirectToAction("Index", "Page");
+        }
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Posts/Trash/5: Hiển thị các mẩu tin có giá trị là 0
+        public ActionResult Trash(int? id)
+        {
+            return View(postsDAO.getList("Trash", "Page"));
+        }
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Page/Undo/5: Chuyển trạng thái Status = 0 thành = 2
+        public ActionResult Undo(int? id)
+        {
+            if (id == null)
+            {
+                //Thông báo thất bại
+                TempData["message"] = new XMessage("danger", "Phục hồi trang đơn thất bại");
+                //Chuyển hướng trang
+                return RedirectToAction("Index", "Page");
+            }
 
-        // GET: Admin/Page/Delete/5
+            //Khi nhấp nút thay đổi Status cho một mẩu tin
+            Posts posts = postsDAO.getRow(id);
+            //Kiểm tra id của page có tồn tại
+            if (posts == null)
+            {
+                //Thông báo thất bại
+                TempData["message"] = new XMessage("danger", "Phục hồi trang đơn thất bại");
+                //Chuyển hướng trang
+                return RedirectToAction("Index", "Page");
+            }
+            //Thay đổi trạng thái Status từ 1 thành 2 và ngược lại
+            posts.Status = 2;
+            //Cập nhật giá trị cho UpdateAt/By
+            posts.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
+            posts.UpdateAt = DateTime.Now;
+            //Gọi hàm Update trong postsDAO
+            postsDAO.Update(posts);
+            //Thông báo thành công
+            TempData["message"] = new XMessage("success", "Phục hồi trang đơn thành công");
+            //Chuyển hướng về trang Trash
+            return RedirectToAction("Trash", "Page");
+        }
+        /////////////////////////////////////////////////////////////////////////////////////
+        // GET: Admin/Page/Delete/5: Xoá một mẩu tin
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                //Thông báo thất bại
+                TempData["message"] = new XMessage("danger", "Xoá trang đơn thất bại");
+                //Chuyển hướng trang
+                return RedirectToAction("Index", "Page");
             }
-            Posts posts = db.Posts.Find(id);
+            Posts posts = postsDAO.getRow(id);
             if (posts == null)
             {
-                return HttpNotFound();
+                //Thông báo thất bại
+                TempData["message"] = new XMessage("danger", "Xoá trang đơn thất bại");
+                //Chuyển hướng trang
+                return RedirectToAction("Index", "Page");
             }
             return View(posts);
         }
-        // POST: Admin/Page/Delete/5:Xoa mot mau tin ra khoi CSDL
+        // POST: Admin/Page/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Posts posts = postsDAO.getRow(id);
 
-            //tim thay mau tin thi xoa, cap nhat cho Links
+            //Tìm thấy mẩu tin thì xoá, cập nhật Links
             if (postsDAO.Delete(posts) == 1)
             {
-                //duong dan den anh can xoa
+                Links links = linksDAO.getRow(posts.Id, "page");
+                //Xoá luôn cho Links
+                linksDAO.Delete(links);
+
+                //Đường dẫn đén ảnh cần xoá
                 string PathDir = "~/Public/img/page/";
-                //cap nhat thi phai xoa file cu
+                //Cập nhật thì phải xoá file cũ
                 if (posts.Image != null)
                 {
                     string DelPath = Path.Combine(Server.MapPath(PathDir), posts.Image);
                     System.IO.File.Delete(DelPath);
                 }
             }
-
-            //Thong bao thanh cong
-            TempData["message"] = new XMessage("success", "Xóa danh mục thành công");
+            //Thông báo thành công
+            TempData["message"] = new XMessage("success", "Xóa trang dơn thành công");
             //O lai trang thung rac
             return RedirectToAction("Trash");
         }
-        // GET: Admin/Page/DelTrash/5
-        public ActionResult DelTrash(int? id)
-        {
-            //khi nhap nut thay doi Status cho mot mau tin
-            Posts posts = postsDAO.getRow(id);
-
-            //thay doi trang thai Status tu 1,2 thanh 0
-            posts.Status = 0;
-
-            //cap nhat gia tri cho UpdateAt/By
-            posts.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
-            posts.UpdateAt = DateTime.Now;
-
-            //Goi ham Update trong PostDAO
-            postsDAO.Update(posts);
-
-            //Thong bao thanh cong
-            TempData["message"] = new XMessage("success", "Xóa trang đơn thành công");
-
-            //khi cap nhat xong thi chuyen ve Index
-            return RedirectToAction("Index", "Page");
-        }
-
-
-        // GET: Admin/Posts/Trash/5
-        public ActionResult Trash(int? id)
-        {
-            return View(postsDAO.getList("Trash", "page"));
-        }
-
-        // GET: Admin/Page/Recover/5
-        public ActionResult Recover(int? id)
-        {
-            if (id == null)
-            {
-                //Thong bao that bai
-                TempData["message"] = new XMessage("danger", "Cập nhật trạng thái thất bại");
-                //chuyen huong trang
-                return RedirectToAction("Index", "Page");
-            }
-
-            //khi nhap nut thay doi Status cho mot mau tin
-            Posts posts = postsDAO.getRow(id);
-            //kiem tra id cua categories co ton tai?
-            if (posts == null)
-            {
-                //Thong bao that bai
-                TempData["message"] = new XMessage("danger", "Phục hồi dữ liệu thất bại");
-
-                //chuyen huong trang
-                return RedirectToAction("Index", "Page");
-            }
-            //thay doi trang thai Status tu 1 thanh 2 va nguoc lai
-            posts.Status = 2;
-
-            //cap nhat gia tri cho UpdateAt/By
-            posts.UpdateBy = Convert.ToInt32(Session["UserId"].ToString());
-            posts.UpdateAt = DateTime.Now;
-
-            //Goi ham Update trong postsDAO
-            postsDAO.Update(posts);
-
-            //Thong bao thanh cong
-            TempData["message"] = new XMessage("success", "Phục hồi dữ liệu thành công");
-
-            //khi cap nhat xong thi chuyen ve Trash
-            return RedirectToAction("Trash", "Page");
-        }
-
     }
 }

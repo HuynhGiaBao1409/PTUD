@@ -28,6 +28,7 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             ViewBag.SupList = suppliersDAO.getList("Index");
             ViewBag.ProList = productsDAO.getList("Index");
             ViewBag.TopList = topicsDAO.getList("Index");
+            ViewBag.PosList = postsDAO.getList("Index", "Page");
             List<Menus> menu = menusDAO.getList("Index");
             return View(menusDAO.getList("Index"));
         }
@@ -148,6 +149,44 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
                     TempData["message"] = new XMessage("danger", "Chưa chọn sản phẩm");
                 }
             }
+            //Them Topic
+            if (!string.IsNullOrEmpty(form["ThemTopic"]))
+            {
+                //kiem tra dau check cua muc con
+                if (!string.IsNullOrEmpty(form["nameTopic"]))
+                {
+                    var listitem = form["nameTopic"];
+                    var listarr = listitem.Split(',');
+                    foreach (var row in listarr)
+                    {
+                        int id = int.Parse(row);//ep kieu int
+                        //lay 1 ban ghi
+                        Topics topics = topicsDAO.getRow(id);
+                        //ta ra menu
+                        Menus menu = new Menus();
+                        menu.Name = topics.Name;
+                        menu.Link = topics.Slug;
+                        menu.TableID = topics.Id;
+                        menu.TypeMenu = "topics";
+                        menu.Position = form["Position"];
+                        menu.ParentID = 0;
+                        menu.Order = 0;
+                        menu.CreateAt = DateTime.Now;
+                        menu.CreateBy = Convert.ToInt32(Session["UserID"].ToString());
+                        menu.UpdateAt = DateTime.Now;
+                        menu.UpdateBy = Convert.ToInt32(Session["UserID"].ToString());
+                        menu.Status = 2; //tam thoi chua xuat ban
+                        //Them vao DB
+                        menusDAO.Insert(menu);
+                    }
+                    TempData["message"] = new XMessage("success", "Thêm vào menu thành công");
+                }
+                else
+                {
+                    TempData["message"] = new XMessage("danger", "Chưa chọn sản phẩm");
+                }
+            }
+            //Them Page
 
             //Them Custom
             if (!string.IsNullOrEmpty(form["ThemCustom"]))
@@ -182,7 +221,6 @@ namespace ThuchanhPTUDW.Areas.Admin.Controllers
             //tra ve trang Index
             return RedirectToAction("Index", "Menu");
         }
-
         ////////////////////////////////////////////////////////////////
         //GET: Admin/Menu/Status/5
         public ActionResult Status(int? id)

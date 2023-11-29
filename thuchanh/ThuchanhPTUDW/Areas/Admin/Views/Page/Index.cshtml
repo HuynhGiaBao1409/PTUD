@@ -1,21 +1,25 @@
-﻿﻿@model IEnumerable<MyClass.Model.Posts>
+﻿﻿﻿@model IEnumerable<MyClass.Model.Posts>
 
 @{
-    ViewBag.Title = "Tất cả bài viết";
+    ViewBag.Title = "danh sách trang đơn";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 @section header {
     <link href="~/Public/css/cdn.datatables.net_1.13.6_css_jquery.dataTables.min.css" rel="stylesheet" />
 }
+
 @section footer {
     <script src="~/Public/js/cdn.datatables.net_1.13.6_js_jquery.dataTables.min.js"></script>
     <script>let table = new DataTable('#myTable');</script>
 }
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
+
     <!-- Main content -->
     <section class="content my-2">
+
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
@@ -27,6 +31,7 @@
                         <a href="@Url.Action("Create","Page")" class="btn-sm btn-success"> <i class="fa fa-plus"></i>Thêm</a>
                         <a href="@Url.Action("Trash","Page")" class="btn-sm btn-danger"> <i class="fa fa-trash"></i>Thùng rác</a>
                     </div>
+
                 </div>
             </div>
             <div class="card-body">
@@ -37,6 +42,7 @@
                         <tr>
                             <th>#</th>
                             <th>@Html.DisplayNameFor(model => model.Title)</th>
+                            <th>@Html.DisplayNameFor(model => model.TopID)</th>
                             <th>@Html.DisplayNameFor(model => model.PostType)</th>
                             <th>@Html.DisplayNameFor(model => model.Image)</th>
                             <th>@Html.DisplayNameFor(model => model.Id)</th>
@@ -50,23 +56,22 @@
                             <tr>
                                 <td><input type="checkbox" name="checkid" value="" /></td>
                                 <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                                <td>@Html.DisplayFor(modelItem => item.TopID)</td>
                                 <td>@Html.DisplayFor(modelItem => item.PostType)</td>
-                                <td>
-                                    <img src=~/Public/img/page/@item.Image alt="Img" class="img-fluid" />
-                                </td>
+                                <td><img src="~/Public/img/page//@item.Image" alt="Img" class="img-fluid" /></td>
                                 <td>@Html.DisplayFor(modelItem => item.Id)</td>
                                 <td>
                                     @if (item.Status == 1)
                                     {
-                                        <a href="@Url.Action(" Status","Page",new{id=item.Id })" class="btn-sm btn-success"> <i class="fa fa-toggle on"></i></a>
+                                        <a href="@Url.Action("Status","Page", new { id = item.Id })" class="btn-sm btn-success"> <i class="fa fa-toggle-on"></i></a>
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action(" Status","Page",new{id=item.Id })" class="btn-sm btn-danger"> <i class="fa fa-toggle-off"></i></a>
+                                        <a href="@Url.Action("Status","Page", new { id = item.Id })" class="btn-sm btn-danger"> <i class="fa fa-toggle-off"></i></a>
                                     }
-                                    <a href="@Url.Action(" Details","Page", new { id=item.Id })" class="btn-sm btn-primary"> <i class="fa fa-eye"></i></a>
-                                    <a href="@Url.Action(" Edit","Page", new { id=item.Id })" class="btn-sm btn-info"> <i class="fa fa-edit"></i></a>
-                                    <a href="@Url.Action(" DelTrash","Page", new { id=item.Id })" class="btn-sm btn-danger"> <i class="fa fa-trash"></i></a>
+                                    <a href="@Url.Action("Details","Page", new { id = item.Id })" class="btn-sm btn-primary"> <i class="fa fa-eye"></i></a>
+                                    <a href="@Url.Action("Edit","Page", new { id = item.Id })" class="btn-sm btn-info"> <i class="fa fa-edit"></i></a>
+                                    <a href="@Url.Action("DelTrash","Page", new { id = item.Id })" class="btn-sm btn-danger"> <i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         }
